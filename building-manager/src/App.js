@@ -1,7 +1,12 @@
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
-  return <div></div>;
+  return (
+    <BrowserRouter>
+      <div>Building Manager Home page</div>;
+    </BrowserRouter>
+  );
 }
 
 export default App;
