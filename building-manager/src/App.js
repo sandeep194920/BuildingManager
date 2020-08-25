@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 function App() {
   return (
     <BrowserRouter>
-      <div>Building Manager Home page</div>;
+      <div>This is home page</div>
     </BrowserRouter>
   );
 }
