@@ -12,8 +12,19 @@ import {
   getFirestore,
   createFirestoreInstance,
 } from "redux-firestore"; // reduxFirestore is a store enhancer to which we pass our firebase config so that getFirestore knows what to connect to in async action creator
-import { ReactReduxFirebaseProvider, getFirebase } from "react-redux-firebase"; // reactReduxFirebase is a store enhancer to which we pass our firebase config so that getFirebase knows what to connect to in async action creator
+import {
+  ReactReduxFirebaseProvider,
+  getFirebase,
+  isLoaded,
+} from "react-redux-firebase"; // reactReduxFirebase is a store enhancer to which we pass our firebase config so that getFirebase knows what to connect to in async action creator
 import fbConfig from "./configs/fbConfig"; // this is passed into reduxFirestore store enhancer
+import { useSelector } from "react-redux";
+
+function AuthIsLoaded({ children }) {
+  const auth = useSelector((state) => state.firebase.auth);
+  if (!isLoaded(auth)) return <div>splash screen...</div>;
+  return children;
+}
 
 //create store and then pass root reducer into it. middleware is used to hold thunk and thunk is the function to dispatch async action creators
 const store = createStore(
@@ -36,7 +47,9 @@ ReactDOM.render(
   // provider below binds react to redux
   <Provider store={store}>
     <ReactReduxFirebaseProvider {...rrfProps}>
-      <App />
+      <AuthIsLoaded>
+        <App />
+      </AuthIsLoaded>
     </ReactReduxFirebaseProvider>
   </Provider>,
   document.getElementById("root")
