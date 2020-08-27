@@ -20,6 +20,7 @@ import {
 import fbConfig from "./configs/fbConfig"; // this is passed into reduxFirestore store enhancer
 import { useSelector } from "react-redux";
 
+// this is used so that the app gets loaded only when the firebase auth is ready
 function AuthIsLoaded({ children }) {
   const auth = useSelector((state) => state.firebase.auth);
   if (!isLoaded(auth)) return <div>splash screen...</div>;
