@@ -31,3 +31,24 @@ exports.addAdminRole = functions.https.onCall((data, context) => {
     })
     .catch((err) => console.log("There is an error here " + err));
 });
+
+//when we call addSuperUserRole from front-end, the call back function written inside this is going to fire
+exports.addSuperUserRole = functions.https.onCall((data, context) => {
+  // data param include any data we send when we call from front-end
+
+  // get the user and add custom claim (superUser) to the user
+  return admin
+    .auth()
+    .getUserByEmail(data.email)
+    .then((user) => {
+      return admin.auth().setCustomUserClaims(user.uid, {
+        superUser: true,
+      });
+    })
+    .then(() => {
+      return {
+        message: `Success! ${data.email} has been made super user`,
+      };
+    })
+    .catch((err) => console.log("There is an error here " + err));
+});

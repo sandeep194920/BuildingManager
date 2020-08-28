@@ -40,3 +40,21 @@ export const makeAdmin = (adminEmail) => {
     addAdminRole({ email: adminEmail }).then((result) => console.log(result));
   };
 };
+
+// This addSuperUserRole() is used to make an email the super user using cloud functions
+
+export const makeSuperUser = (superUserEmail) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    console.log("The email is " + superUserEmail);
+    const firebase = getFirebase();
+
+    // calling cloud function here
+    const addSuperUserRole = firebase
+      .functions()
+      .httpsCallable("addSuperUserRole");
+
+    addSuperUserRole({ email: superUserEmail }).then((result) =>
+      console.log(result)
+    );
+  };
+};
