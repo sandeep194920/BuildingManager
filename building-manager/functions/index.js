@@ -9,7 +9,7 @@ const functions = require("firebase-functions");
 // });
 
 const admin = require("firebase-admin");
-admin.initializeApp();
+admin.initializeApp(functions.config().firebase);
 
 //when we call addAdminRole from front-end, the call back function written inside this is going to fire
 exports.addAdminRole = functions.https.onCall((data, context) => {

@@ -23,7 +23,7 @@ import { useSelector } from "react-redux";
 // this is used so that the app gets loaded only when the firebase auth is ready
 function AuthIsLoaded({ children }) {
   const auth = useSelector((state) => state.firebase.auth);
-  if (!isLoaded(auth)) return <div>splash screen...</div>;
+  if (!isLoaded(auth)) return <div>Loading ...</div>;
   return children;
 }
 

@@ -1,5 +1,3 @@
-// import { getFirebase } from "react-redux-firebase";
-
 export const login = (username, password) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firebase = getFirebase();
@@ -16,5 +14,29 @@ export const login = (username, password) => {
         dispatch({ type: "LOGIN_FAIL" });
         console.log(err);
       });
+  };
+};
+
+export const logout = () => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firebase = getFirebase();
+    firebase
+      .auth()
+      .signOut()
+      .then((resp) => console.log("Logged out"));
+  };
+};
+
+// add admin cloud functions. This makeAdmin() is used to make an email the admin using cloud functions
+
+export const makeAdmin = (adminEmail) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    console.log("The email is " + adminEmail);
+    const firebase = getFirebase();
+
+    // calling cloud function here
+    const addAdminRole = firebase.functions().httpsCallable("addAdminRole");
+
+    addAdminRole({ email: adminEmail }).then((result) => console.log(result));
   };
 };
