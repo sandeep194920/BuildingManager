@@ -21,8 +21,12 @@ const Login = (props) => {
       // User is signed in.
       console.log("Header logged in if -> " + user.uid);
       user.getIdTokenResult().then((idTokenResult) => {
-        console.log(idTokenResult.claims.admin);
+        // console.log(idTokenResult.claims);
         if (idTokenResult.claims.admin) {
+          history.push("/");
+        } else if (idTokenResult.claims.superUser) {
+          history.push("/");
+        } else {
           history.push("/");
         }
       });
