@@ -19,6 +19,8 @@ function App(props) {
       <Switch>
         <Route path="/" exact component={Dashboard} />
         <Route path="/login" exact component={Login} />
+        {/* Default route to home if none of the above routes are matched */}
+        <Route path="/" component={Dashboard} />
       </Switch>
     );
   } else if (role === "admin") {
@@ -29,6 +31,8 @@ function App(props) {
         <Route path="/" exact component={Dashboard} />
         <Route path="/login" exact component={Login} />
         <Route path="/admin" exact component={AdminDashboard} />
+        {/* Default route to home if none of the above routes are matched */}
+        <Route path="/" component={Dashboard} />
       </Switch>
     );
   } else if (role === "superUser") {
@@ -40,6 +44,8 @@ function App(props) {
         <Route path="/login" exact component={Login} />
         <Route path="/admin" exact component={AdminDashboard} />
         <Route path="/superuser" exact component={SuperUserDashboard} />
+        {/* Default route to home if none of the above routes are matched */}
+        <Route path="/" component={Dashboard} />
       </Switch>
     );
   }
@@ -72,7 +78,6 @@ function App(props) {
     }
   });
 
-  console.log(firebase);
   return (
     <BrowserRouter>
       {/* gets the routes according to the role of admin / user / superuser */}
@@ -88,3 +93,20 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(App);
+
+// roles :
+
+// 1. Routes for logged out user
+//   /  dashboard -> contains  2 login links, tenant-login and admin-login -> When logged in, takes the user to respective dashboard page based on his role
+//
+
+// 2. Routes for admin user
+//   /  admin dashboard  -> Contains logout link -> When logged out, gets back to 1. logged out dashboard
+
+// 3. Routes for super user
+//  /superuser-login -> Can login as super user and then takes to /superuser -> super user dashboard
+//  /superuser contains form to make an email a super user as well as admin. It also contains a logout btn that helps to logout
+
+// 4. Routes for tenant user
+// /  dashboard -> Contains logout link -> When logged out, gets back to 1. logged out dashboard which is same as this dashboard
+// /tenant-login -> is for tenant login. It contains placeholder for username , pass and apt number.
