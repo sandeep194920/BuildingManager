@@ -4,7 +4,13 @@ import { makeAdmin, makeSuperUser } from "../../store/actions/authActions";
 import { logout } from "../../store/actions/authActions";
 
 const SuperUserDashboard = (props) => {
-  const { makeUserAsAdmin, makeUserAsSuperUser } = props;
+  const {
+    makeUserAsAdmin,
+    makeUserAsSuperUser,
+    onLogoutUser,
+    firebaseProp,
+  } = props;
+
   const [email, setEmail] = useState(null);
   const makeAdminHandler = (e) => {
     e.preventDefault();
@@ -15,6 +21,10 @@ const SuperUserDashboard = (props) => {
     e.preventDefault();
     console.log("The email is " + email);
     makeUserAsSuperUser(email);
+  };
+
+  const logoutHandler = () => {
+    onLogoutUser();
   };
 
   return (
@@ -45,8 +55,28 @@ const SuperUserDashboard = (props) => {
       </form>
       <br></br>
       <a href="/">Home</a>
+      <br></br>
+      <br></br>
+
+      {firebaseProp.auth.uid ? (
+        <button type="button" onClick={logoutHandler}>
+          Logout
+        </button>
+      ) : (
+        <div>
+          <br />
+          <br />
+          <a href="/login">Login</a>
+        </div>
+      )}
     </div>
   );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    firebaseProp: state.firebase,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -57,4 +87,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(SuperUserDashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(SuperUserDashboard);

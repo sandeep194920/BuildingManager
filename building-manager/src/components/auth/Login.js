@@ -23,9 +23,9 @@ const Login = (props) => {
       user.getIdTokenResult().then((idTokenResult) => {
         // console.log(idTokenResult.claims);
         if (idTokenResult.claims.admin) {
-          history.push("/");
+          history.push("/admin");
         } else if (idTokenResult.claims.superUser) {
-          history.push("/");
+          history.push("/superuser");
         } else {
           history.push("/");
         }

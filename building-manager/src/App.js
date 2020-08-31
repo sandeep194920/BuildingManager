@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Dashboard from "./components/dashboard/Dashboard";
 import AdminDashboard from "./components/dashboard/AdminDashboard";
@@ -20,7 +20,8 @@ function App(props) {
         <Route path="/" exact component={Dashboard} />
         <Route path="/login" exact component={Login} />
         {/* Default route to home if none of the above routes are matched */}
-        <Route path="/" component={Dashboard} />
+        {/* <Route path="/" component={Dashboard} /> */}
+        <Redirect exact from="/" to="/" />
       </Switch>
     );
   } else if (role === "admin") {
@@ -28,11 +29,12 @@ function App(props) {
 
     routes = (
       <Switch>
-        <Route path="/" exact component={Dashboard} />
-        <Route path="/login" exact component={Login} />
+        {/* <Route path="/" exact component={Dashboard} /> */}
         <Route path="/admin" exact component={AdminDashboard} />
+        <Route path="/login" exact component={Login} />
         {/* Default route to home if none of the above routes are matched */}
-        <Route path="/" component={Dashboard} />
+        {/* <Route path="/admin" component={AdminDashboard} /> */}
+        <Redirect exact from="/" to="/admin" />
       </Switch>
     );
   } else if (role === "superUser") {
@@ -40,12 +42,13 @@ function App(props) {
 
     routes = (
       <Switch>
-        <Route path="/" exact component={Dashboard} />
+        {/* <Route path="/" exact component={Dashboard} /> */}
         <Route path="/login" exact component={Login} />
         <Route path="/admin" exact component={AdminDashboard} />
         <Route path="/superuser" exact component={SuperUserDashboard} />
         {/* Default route to home if none of the above routes are matched */}
-        <Route path="/" component={Dashboard} />
+        {/* <Route path="/superuser" component={SuperUserDashboard} /> */}
+        <Redirect exact from="/" to="/superuser" />
       </Switch>
     );
   }
@@ -97,7 +100,7 @@ export default connect(mapStateToProps)(App);
 // roles :
 
 // 1. Routes for logged out user
-//   /  dashboard -> contains  2 login links, tenant-login and admin-login -> When logged in, takes the user to respective dashboard page based on his role
+//   /  dashboard -> contains login links -> When logged in, takes the user to respective dashboard page based on his role
 //
 
 // 2. Routes for admin user
