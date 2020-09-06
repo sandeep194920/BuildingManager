@@ -1,9 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import { logout } from "../../store/actions/authActions";
+import AdminRegisterUser from "../auth/AdminRegisterUser";
 
 const AdminDashboard = (props) => {
-  const { onLogoutUser, firebaseProp } = props;
+  const { onLogoutUser, firebaseProp, authProp } = props;
 
   const logoutHandler = () => {
     onLogoutUser();
@@ -29,7 +30,12 @@ const AdminDashboard = (props) => {
           <a href="/login">Login</a>
         </div>
       )}
-      <AdminDashboard />
+      <br></br>
+      <p style={{ color: "red" }}>
+        {authProp.authError !== null && authProp.authError}
+      </p>
+      <br></br>
+      <AdminRegisterUser />
     </div>
   );
 };
@@ -37,6 +43,7 @@ const AdminDashboard = (props) => {
 const mapStateToProps = (state) => {
   return {
     firebaseProp: state.firebase,
+    authProp: state.auth,
   };
 };
 

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { registerUserByAdmin } from "../../store/actions/authActions";
-// import firebase from "firebase/app";
-// import { useHistory } from "react-router";
 
 const AdminRegisterUser = (props) => {
   const { onUserRegisterByAdmin } = props;
@@ -12,8 +10,6 @@ const AdminRegisterUser = (props) => {
   const [lastName, setLastName] = useState(null);
   const [phoneNo, setPhoneNo] = useState(null);
   const [unitNo, setUnitNo] = useState(null);
-
-  //   const history = useHistory();
 
   const userRegisterByAdminHandler = (e) => {
     e.preventDefault(); // prevents page refresh
@@ -28,34 +24,9 @@ const AdminRegisterUser = (props) => {
     });
   };
 
-  //   firebase.auth().onAuthStateChanged(function (user) {
-  //     if (user) {
-  //       // User is signed in.
-  //       console.log("Header logged in if -> " + user.uid);
-  //       user.getIdTokenResult().then((idTokenResult) => {
-  //         // console.log(idTokenResult.claims);
-  //         if (idTokenResult.claims.admin) {
-  //           history.push("/admin");
-  //         } else if (idTokenResult.claims.superUser) {
-  //           history.push("/superuser");
-  //         } else {
-  //           history.push("/");
-  //         }
-  //       });
-
-  //       // setUserId(user.uid);
-  //       // setUserName(user.displayName);
-  //     } else {
-  //       // No user is signed in.
-  //       // console.log("Header else -> ");
-  //       // setUserId(null);
-  //       // setUserName(null);
-  //     }
-  //   });
-
   return (
     <div>
-      <form>
+      <form onSubmit={userRegisterByAdminHandler}>
         <br></br>
         <br></br>
         <label>Enter Email Id</label>
@@ -65,6 +36,7 @@ const AdminRegisterUser = (props) => {
           type="email"
           defaultValue={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <br></br>
         <br></br>
@@ -75,6 +47,7 @@ const AdminRegisterUser = (props) => {
           type="password"
           defaultValue={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <br></br>
         <br></br>
@@ -86,6 +59,7 @@ const AdminRegisterUser = (props) => {
           type="input"
           defaultValue={firstName}
           onChange={(e) => setFirstName(e.target.value)}
+          required
         />
         <br></br>
         <br></br>
@@ -96,6 +70,7 @@ const AdminRegisterUser = (props) => {
           type="input"
           defaultValue={lastName}
           onChange={(e) => setLastName(e.target.value)}
+          required
         />
         <br></br>
         <br></br>
@@ -106,6 +81,7 @@ const AdminRegisterUser = (props) => {
           type="input"
           defaultValue={phoneNo}
           onChange={(e) => setPhoneNo(e.target.value)}
+          required
         />
         <br></br>
         <br></br>
@@ -116,14 +92,11 @@ const AdminRegisterUser = (props) => {
           type="input"
           defaultValue={unitNo}
           onChange={(e) => setUnitNo(e.target.value)}
+          required
         />
         <br></br>
         <br></br>
-        <input
-          onClick={userRegisterByAdminHandler}
-          type="submit"
-          value="Register This User"
-        />
+        <input type="submit" value="Register This User" />
       </form>
       <br></br>
       <br></br>

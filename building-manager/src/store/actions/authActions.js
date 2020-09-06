@@ -14,9 +14,11 @@ export const registerUserByAdmin = (registrationParams) => {
         registrationParams.password
       ) // change this to -> click on link sent to email and create password later
       .then((response) => {
-        dispatch({ type: "REGISTRATION_SUCCESS" });
-        console.log(response.user.uid);
-
+        dispatch({
+          type: "REGISTRATION_SUCCESS",
+          registerdUser: registrationParams.email,
+        });
+        alert(`The user ${registrationParams.email} registered successfully`);
         // add this user who just now registered into users collection and then assign his unit number. If users collection doesnt exist, then it will be created using below code
         firestore.collection("users").doc(response.user.uid).set({
           unitNo: registrationParams.unitNo,
@@ -26,7 +28,10 @@ export const registerUserByAdmin = (registrationParams) => {
         });
       })
       .catch((err) => {
-        dispatch({ type: "REGISTRATION_FAIL" });
+        dispatch({
+          type: "REGISTRATION_FAIL",
+          registeredUser: registrationParams.email,
+        });
         console.log(err);
       });
   };

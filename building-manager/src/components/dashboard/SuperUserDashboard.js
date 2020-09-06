@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { makeAdmin, makeSuperUser } from "../../store/actions/authActions";
 import { logout } from "../../store/actions/authActions";
-import AdminRegisterUser from "../auth/AdminRegisterUser";
 
 const SuperUserDashboard = (props) => {
   const {
@@ -55,11 +54,8 @@ const SuperUserDashboard = (props) => {
         />
       </form>
       <br></br>
-      <a href="/">Home</a>
       <br></br>
       <br></br>
-      <br />
-      <br />
 
       {firebaseProp.auth.uid ? (
         <button type="button" onClick={logoutHandler}>
@@ -72,9 +68,6 @@ const SuperUserDashboard = (props) => {
           <a href="/login">Login</a>
         </div>
       )}
-      <br></br>
-      <h2>Register a user here</h2>
-      <AdminRegisterUser />
     </div>
   );
 };
