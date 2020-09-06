@@ -1,3 +1,38 @@
+// register a user by admin -> Comes from AdminRegisterUser.js
+export const registerUserByAdmin = (registrationParams) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firebase = getFirebase();
+    const firestore = getFirestore();
+
+    console.log("The username " + registrationParams.email);
+    console.log("The pass is " + registrationParams.password);
+
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(
+        registrationParams.email,
+        registrationParams.password
+      ) // change this to -> click on link sent to email and create password later
+      .then((response) => {
+        dispatch({ type: "REGISTRATION_SUCCESS" });
+        console.log(response.user.uid);
+
+        // add this user who just now registered into users collection and then assign his unit number. If users collection doesnt exist, then it will be created using below code
+        firestore.collection("users").doc(response.user.uid).set({
+          unitNo: registrationParams.unitNo,
+          phoneNo: registrationParams.phoneNo,
+          firstName: registrationParams.firstName,
+          lastName: registrationParams.lastName,
+        });
+      })
+      .catch((err) => {
+        dispatch({ type: "REGISTRATION_FAIL" });
+        console.log(err);
+      });
+  };
+};
+
+// login
 export const login = (username, password) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firebase = getFirebase();
@@ -16,7 +51,7 @@ export const login = (username, password) => {
       });
   };
 };
-
+// logout
 export const logout = () => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firebase = getFirebase();

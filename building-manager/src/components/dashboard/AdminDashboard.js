@@ -29,6 +29,7 @@ const AdminDashboard = (props) => {
           <a href="/login">Login</a>
         </div>
       )}
+      <AdminDashboard />
     </div>
   );
 };
