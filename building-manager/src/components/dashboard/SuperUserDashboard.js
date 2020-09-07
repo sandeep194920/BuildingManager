@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { makeAdmin, makeSuperUser } from "../../store/actions/authActions";
 import { logout } from "../../store/actions/authActions";
+import { useHistory } from "react-router";
 
 const SuperUserDashboard = (props) => {
   const {
@@ -10,7 +11,7 @@ const SuperUserDashboard = (props) => {
     onLogoutUser,
     firebaseProp,
   } = props;
-
+  const history = useHistory();
   const [email, setEmail] = useState(null);
   const makeAdminHandler = (e) => {
     e.preventDefault();
@@ -24,7 +25,7 @@ const SuperUserDashboard = (props) => {
   };
 
   const logoutHandler = () => {
-    onLogoutUser();
+    onLogoutUser(history);
   };
 
   return (
@@ -82,7 +83,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     makeUserAsAdmin: (email) => dispatch(makeAdmin(email)),
     makeUserAsSuperUser: (email) => dispatch(makeSuperUser(email)),
-    onLogoutUser: () => dispatch(logout()),
+    onLogoutUser: (history) => dispatch(logout(history)),
   };
 };
 

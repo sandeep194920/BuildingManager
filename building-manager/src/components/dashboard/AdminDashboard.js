@@ -2,12 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { logout } from "../../store/actions/authActions";
 import AdminRegisterUser from "../auth/AdminRegisterUser";
+import { useHistory } from "react-router";
 
 const AdminDashboard = (props) => {
   const { onLogoutUser, firebaseProp, authProp } = props;
-
+  const history = useHistory();
   const logoutHandler = () => {
-    onLogoutUser();
+    onLogoutUser(history);
   };
 
   return (
@@ -49,7 +50,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLogoutUser: () => dispatch(logout()),
+    onLogoutUser: (history) => dispatch(logout(history)),
   };
 };
 

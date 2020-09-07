@@ -18,6 +18,38 @@ export const registerUserByAdmin = (registrationParams) => {
           type: "REGISTRATION_SUCCESS",
           registerdUser: registrationParams.email,
         });
+
+        // const actionCodeSettings = {
+        // url: "localhost:3000",
+        // "https://www.example.com/?email=" +
+        // firebase.auth().currentUser.email,
+        // iOS: {
+        //   bundleId: 'com.example.ios'
+        // },
+        // android: {
+        //   packageName: 'com.example.android',
+        //   installApp: true,
+        //   minimumVersion: '12'
+        // },
+        // handleCodeInApp: true,
+        // // When multiple custom dynamic link domains are defined, specify which
+        // // one to use.
+        // dynamicLinkDomain: "example.page.link"
+        // };
+
+        // send verification email
+        var user = firebase.auth().currentUser;
+        user
+          .sendEmailVerification()
+          .then(function () {
+            // Email sent.
+            console.log("Email sent");
+          })
+          .catch(function (error) {
+            // An error happened.
+            console.log("Due to error, email was not sent " + error.message);
+          });
+
         alert(`The user ${registrationParams.email} registered successfully`);
         // add this user who just now registered into users collection and then assign his unit number. If users collection doesnt exist, then it will be created using below code
         firestore.collection("users").doc(response.user.uid).set({
@@ -57,13 +89,16 @@ export const login = (username, password) => {
   };
 };
 // logout
-export const logout = () => {
+export const logout = (history) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firebase = getFirebase();
     firebase
       .auth()
       .signOut()
-      .then((resp) => console.log("Logged out"));
+      .then((resp) => {
+        console.log("Logged out");
+        history.push("/login");
+      });
   };
 };
 

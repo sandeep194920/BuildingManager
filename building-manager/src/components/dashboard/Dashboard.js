@@ -2,12 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { makeAdmin, makeSuperUser } from "../../store/actions/authActions";
 import { logout } from "../../store/actions/authActions";
+import { useHistory } from "react-router";
 
 const Dashboard = (props) => {
   const { onLogoutUser, firebaseProp } = props;
-
+  const history = useHistory();
   const logoutHandler = () => {
-    onLogoutUser();
+    onLogoutUser(history);
   };
 
   return (
@@ -30,6 +31,7 @@ const Dashboard = (props) => {
   );
 };
 const mapStateToProps = (state) => {
+  console.log(state.firebase);
   return {
     firebaseProp: state.firebase,
   };
@@ -39,7 +41,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     makeUserAsAdmin: (email) => dispatch(makeAdmin(email)),
     makeUserAsSuperUser: (email) => dispatch(makeSuperUser(email)),
-    onLogoutUser: () => dispatch(logout()),
+    onLogoutUser: (history) => dispatch(logout(history)),
   };
 };
 
