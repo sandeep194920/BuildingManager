@@ -37,7 +37,6 @@ const AdminDashboard = (props) => {
         {authProp.authError !== null && authProp.authError}
       </p>
       <br></br>
-      {/* <AdminRegisterUser /> */}
       <AdminAddUser />
     </div>
   );

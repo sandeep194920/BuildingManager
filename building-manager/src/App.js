@@ -165,22 +165,22 @@ export default connect(mapStateToProps)(App);
 
 // functionality of user registration:
 
-// 1. Admin fills the form by giving a user's email (who can register as a tenant user in future) and his room number.
-//    This should create a user in users collection.
+// 1. Admin fills the form by giving a user's email and his unitNo number (This is done for the users who are tenants - either leasee or occupant).
+//    This should create a user in unregisteredUsers collection.
 
-// 2. Now the user registers by giving email, pass, phone. Now during registration, all users are called in users collection
-//    and checked for this email. If it exists then this user can become a tenant user and assigned a role of tenant-user. Also,
-//    the existing user in users collection is updated to have the same user id but retained the apartment number. All of this is
-//    done to protect the apartment number and not accidentally access some other apartment.
+// 2. Now the user registers by giving email, pass, phone. Now during registration, all users are called in unregisteredUsers collection
+//    and checked for this email. If it exists then the unitNo and leasee/occupant info is taken from that so this user can be registered
+//    as tenant user and assigned a role of tenant-user. After registration, this user (if was present on unregisteredUsers collection),
+//    is removed from unregisteredUsers collection.
 
-// 3. What is the advantage of step 2 type registration ? a) The apt number is protected. Tenant user role is assigned and can
+// 3. What is the advantage of step 2 type registration ? a) The unit number is protected. Tenant user role is assigned and can
 //    differentiate the non-tenant user.
 
 // 4. Let's say the user registers by giving all the details of email, pass and phone. Now during registration, all the users
-//    are called in users collection and checked for this email which doesnt exist. Then this user is not our tenant and hence
-//    can be assigned a role of non-tenant user.
+//    are called in unregisteredUsers collection and checked for this email which doesnt exist. Then this user is not our tenant and hence
+//    can be considered as non-tenant user and no need of any role though. No role means non-tenant user. Subject to change in future if needed.
 
 // 5. How it happens if the non-tenant user should become a tenant-user ?
-//    In this case, the user must be manually assigned the tenant user's role and then assign the apt number manually to this user.
+//    In this case, the user must be manually assigned the tenant user's role and then assign the unit number manually to this user.
 //    The admin dashboard will have a way to check if the user is tenant-user or non-tenant user. non-tenant user is not assinged
 //    any role and the tenant user is assigned a tenant user role.

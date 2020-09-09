@@ -6,6 +6,7 @@ const AdminAddUser = (props) => {
   const { onUserAddByAdmin } = props;
   const [email, setEmail] = useState(null);
   const [unitNo, setUnitNo] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("occupant");
 
   const userAdditionByAdminHandler = (e) => {
     e.preventDefault(); // prevents page refresh
@@ -13,6 +14,7 @@ const AdminAddUser = (props) => {
     onUserAddByAdmin({
       email,
       unitNo,
+      selectedOption,
     });
   };
 
@@ -44,6 +46,36 @@ const AdminAddUser = (props) => {
         />
         <br></br>
         <br></br>
+
+        <label>Is this user leasee or occupant ?</label>
+        {/* <form> */}
+        <div className="radio">
+          <label>
+            <input
+              type="radio"
+              value="leasee"
+              checked={selectedOption === "leasee"}
+              onChange={() => setSelectedOption("leasee")}
+            />
+            Leasee
+          </label>
+        </div>
+        <div className="radio">
+          <label>
+            <input
+              type="radio"
+              value="occupant"
+              checked={selectedOption === "occupant"}
+              onChange={() => setSelectedOption("occupant")}
+            />
+            Occupant
+          </label>
+        </div>
+        {/* </form> */}
+        <br></br>
+
+        <br></br>
+
         <input type="submit" value="Assign the unit" />
       </form>
       <br></br>
@@ -55,11 +87,12 @@ const AdminAddUser = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onUserAddByAdmin: ({ email, unitNo }) =>
+    onUserAddByAdmin: ({ email, unitNo, selectedOption }) =>
       dispatch(
         addUserByAdmin({
           email,
           unitNo,
+          selectedOption,
         })
       ),
   };

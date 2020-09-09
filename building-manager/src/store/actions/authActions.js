@@ -111,6 +111,7 @@ export const addUserByAdmin = (tenantsInfo) => {
       .set({
         email: tenantsInfo.email,
         unitNo: tenantsInfo.unitNo,
+        type: tenantsInfo.selectedOption,
       }) // TODO : Dispatch the below action later
       .then(console.log("Added new user to unregistered list successfully."))
       .catch((err) => console.log(err));
