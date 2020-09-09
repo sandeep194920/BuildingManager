@@ -1,32 +1,32 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { registerUserByAdmin } from "../../store/actions/authActions";
+import { register } from "../../store/actions/authActions";
 
-const AdminRegisterUser = (props) => {
-  const { onUserRegisterByAdmin } = props;
+const Register = (props) => {
+  const { onRegister } = props;
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [phoneNo, setPhoneNo] = useState(null);
-  const [unitNo, setUnitNo] = useState(null);
+  // const [unitNo, setUnitNo] = useState(null);
 
-  const userRegisterByAdminHandler = (e) => {
+  const registerHandler = (e) => {
     e.preventDefault(); // prevents page refresh
     console.log("Reached admin register handler");
-    onUserRegisterByAdmin({
+    onRegister({
       email,
       password,
       firstName,
       lastName,
-      unitNo,
+      // unitNo,
       phoneNo,
     });
   };
 
   return (
     <div>
-      <form onSubmit={userRegisterByAdminHandler}>
+      <form onSubmit={registerHandler}>
         <br></br>
         <br></br>
         <label>Enter Email Id</label>
@@ -85,17 +85,6 @@ const AdminRegisterUser = (props) => {
         />
         <br></br>
         <br></br>
-
-        <label>Unit Number</label>
-        <br></br>
-        <input
-          type="input"
-          defaultValue={unitNo}
-          onChange={(e) => setUnitNo(e.target.value)}
-          required
-        />
-        <br></br>
-        <br></br>
         <input type="submit" value="Register This User" />
       </form>
       <br></br>
@@ -107,25 +96,18 @@ const AdminRegisterUser = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onUserRegisterByAdmin: ({
-      email,
-      password,
-      firstName,
-      lastName,
-      unitNo,
-      phoneNo,
-    }) =>
+    onRegister: ({ email, password, firstName, lastName, phoneNo }) =>
       dispatch(
-        registerUserByAdmin({
+        register({
           email,
           password,
           firstName,
           lastName,
-          unitNo,
+          // unitNo,
           phoneNo,
         })
       ),
   };
 };
 
-export default connect(null, mapDispatchToProps)(AdminRegisterUser);
+export default connect(null, mapDispatchToProps)(Register);

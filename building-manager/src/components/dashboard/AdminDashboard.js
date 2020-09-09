@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { logout } from "../../store/actions/authActions";
-import AdminRegisterUser from "../auth/AdminRegisterUser";
+// import AdminRegisterUser from "../auth/AdminRegisterUser";
+import AdminAddUser from "../auth/AdminAddUser";
 import { useHistory } from "react-router";
 
 const AdminDashboard = (props) => {
@@ -36,7 +37,8 @@ const AdminDashboard = (props) => {
         {authProp.authError !== null && authProp.authError}
       </p>
       <br></br>
-      <AdminRegisterUser />
+      {/* <AdminRegisterUser /> */}
+      <AdminAddUser />
     </div>
   );
 };

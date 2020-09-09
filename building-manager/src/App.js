@@ -7,6 +7,7 @@ import SuperUserDashboard from "./components/dashboard/SuperUserDashboard";
 import { connect } from "react-redux";
 import firebase from "firebase/app";
 import EmailVerfiy from "./components/auth/EmailVerify";
+import Register from "./components/auth/Register";
 
 function App(props) {
   // const { firebaseProp } = props; // this is given by firebaseReducer coming from mapStateToProps. We might use this to check the uid or something related to the user. Alternatively, we could use firebase which we imported
@@ -27,6 +28,7 @@ function App(props) {
         <Switch>
           <Route path="/" exact component={Dashboard} />
           <Route path="/login" exact component={Login} />
+          <Route path="/register" exact component={Register} />
           {/* Default route to home if none of the above routes are matched */}
           <Redirect to="/" />
         </Switch>
@@ -62,6 +64,7 @@ function App(props) {
         <Switch>
           <Route path="/" exact component={Dashboard} />
           <Route path="/login" exact component={Login} />
+          <Route path="/register" exact component={Register} />
           <Redirect to="/" />
         </Switch>
       );
@@ -84,6 +87,7 @@ function App(props) {
       <Switch>
         <Route path="/" exact component={Dashboard} />
         <Route path="/login" exact component={Login} />
+        <Route path="/register" exact component={Register} />
         <Redirect to="/" />
       </Switch>
     );
