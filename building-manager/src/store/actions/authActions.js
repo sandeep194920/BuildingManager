@@ -11,6 +11,7 @@ export const register = (registrationParams) => {
     // If exists, then we need to get the email and his unit number and then pass the unit number below so that he gets registered to the right unit
     let unitNo = null;
     let email = null;
+    let tenantType = null;
 
     // query for a user in unregisteredUsers collection. If exists, then it means he is a tenant/occupant and hence should have a unitNo and also we should assign him the tenant role (TODO).
     // we get the unitNo from unregisteredUsers collection, and if the user isn't present there then the unitNo will be null, hence we can
@@ -25,6 +26,7 @@ export const register = (registrationParams) => {
           console.log(doc.id, " => ", doc.data());
           email = doc.data().email;
           unitNo = doc.data().unitNo;
+          tenantType = doc.data().type;
         });
       })
       .then(function () {
@@ -38,6 +40,7 @@ export const register = (registrationParams) => {
           );
         } else {
           unitNo = -1;
+          tenantType = -1;
           console.log(
             "No users found with this email in unregisteredUsers collection, hence continuing to register without the unit number"
           );
@@ -79,6 +82,7 @@ export const register = (registrationParams) => {
               phoneNo: registrationParams.phoneNo,
               firstName: registrationParams.firstName,
               lastName: registrationParams.lastName,
+              type: tenantType,
             });
           })
           .catch((err) => {
