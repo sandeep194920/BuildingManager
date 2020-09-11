@@ -12,6 +12,7 @@ export const register = (registrationParams) => {
     let unitNo = null;
     let email = null;
     let tenantType = null;
+    let docId = null; // this unregisteredUser document is searched using this docId to remove the user from unregisteredUsers collection after registration
 
     // query for a user in unregisteredUsers collection. If exists, then it means he is a tenant/occupant and hence should have a unitNo and also we should assign him the tenant role (TODO).
     // we get the unitNo from unregisteredUsers collection, and if the user isn't present there then the unitNo will be null, hence we can
@@ -27,6 +28,7 @@ export const register = (registrationParams) => {
           email = doc.data().email;
           unitNo = doc.data().unitNo;
           tenantType = doc.data().type;
+          docId = doc.id; // this is used to remove the user from unregisteredUsers collection after registration
         });
       })
       .then(function () {
@@ -45,7 +47,10 @@ export const register = (registrationParams) => {
             "No users found with this email in unregisteredUsers collection, hence continuing to register without the unit number"
           );
         }
+      })
+      .then(function () {
         // user registration process
+        console.log("User registering now...");
         firebase
           .auth()
           .createUserWithEmailAndPassword(
@@ -92,6 +97,30 @@ export const register = (registrationParams) => {
             });
             console.log(err);
           });
+      })
+      .then(function () {
+        // remove the user from unregisteredUsers list if it exists
+        // if unitNo is not -1 then the unregistered users list exists.
+        // Also, docId can be checked if it exists in unregisteredUsers list, but lets go with unitNo which doesn't have to search the db
+        if (docId) {
+          console.log(`unregisteredUser ${docId} exists so removing it ...`);
+          firestore
+            .collection("unregisteredUsers")
+            .doc(docId)
+            .delete()
+            .then(function () {
+              console.log(
+                `Removed the registered user ${email} from unregistered users collection`
+              );
+            })
+            .catch((error) =>
+              console.log(`Error removing the unregistered user ${error}`)
+            );
+        } else {
+          console.log(
+            `unregisteredUser doesn't exists so external user was registered`
+          );
+        }
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);

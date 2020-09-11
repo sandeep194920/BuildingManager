@@ -14,6 +14,8 @@ const Dashboard = (props) => {
   return (
     <React.Fragment>
       <div>Welcome to the Building manager app</div>
+      <br></br>
+      <br></br>
       {firebaseProp.auth.uid ? (
         <button type="button" onClick={logoutHandler}>
           Logout
