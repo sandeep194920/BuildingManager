@@ -10,88 +10,12 @@ import EmailVerfiy from "./components/auth/EmailVerify";
 import Register from "./components/auth/Register";
 
 function App(props) {
-  // const { firebaseProp } = props; // this is given by firebaseReducer coming from mapStateToProps. We might use this to check the uid or something related to the user. Alternatively, we could use firebase which we imported
-
-  const [role, setRole] = React.useState(null);
-  const [isEmailVerified, setEmailVerified] = React.useState(false);
-  const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
-
+  const { firebaseProp } = props; // this is given by firebaseReducer coming from mapStateToProps. We might use this to check the uid or something related to the user. Alternatively, we could use firebase which we imported
+  console.log(firebaseProp);
+  const [role, setRole] = React.useState("user");
+  const [isEmailVerified, setEmailVerified] = React.useState(true);
+  const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(true);
   let routes = null;
-
-  // the user is currently logged in and also verified, so he can see all the routes according to his role
-  if (isUserLoggedIn && isEmailVerified) {
-    console.log("User logged in and also verified. Now he can have access");
-    // normal user
-    if (role === "user") {
-      console.log("The logged in user is Normal User");
-      routes = (
-        <Switch>
-          <Route path="/" exact component={Dashboard} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/register" exact component={Register} />
-          {/* Default route to home if none of the above routes are matched */}
-          <Redirect to="/" />
-        </Switch>
-      );
-      // admin user
-    } else if (role === "admin") {
-      console.log("The logged in user is Admin User");
-
-      routes = (
-        <Switch>
-          <Route path="/admin" exact component={AdminDashboard} />
-          <Route path="/login" exact component={Login} />
-          {/* Default route to home if none of the above routes are matched */}
-          <Redirect to="/admin" />
-        </Switch>
-      );
-      // super user
-    } else if (role === "superUser") {
-      console.log("The logged in user is Super User");
-
-      routes = (
-        <Switch>
-          <Route path="/login" exact component={Login} />
-          <Route path="/admin" exact component={AdminDashboard} />
-          <Route path="/superuser" exact component={SuperUserDashboard} />
-          {/* Default route to home if none of the above routes are matched */}
-          <Redirect to="/superuser" />
-        </Switch>
-      );
-      // normal user. This is not necessary but just in case. Can be modified this later to remove this else statement or insert any other default case
-    } else {
-      routes = (
-        <Switch>
-          <Route path="/" exact component={Dashboard} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/register" exact component={Register} />
-          <Redirect to="/" />
-        </Switch>
-      );
-    }
-    // if user is logged in and email not verified then he can see only the verify-email page that has a verify email message and a logout btn
-  } else if (isUserLoggedIn && !isEmailVerified) {
-    console.log(
-      "User logged in but not verified. First he need to verify and then only access any resource"
-    );
-    routes = (
-      <Switch>
-        <Route path="/verify-email" exact component={EmailVerfiy} />
-        <Redirect to="/verify-email" />
-      </Switch>
-    );
-    // the user is not logged in here
-  } else {
-    console.log("The user not logged in at all so no problem");
-    routes = (
-      <Switch>
-        <Route path="/" exact component={Dashboard} />
-        <Route path="/login" exact component={Login} />
-        <Route path="/register" exact component={Register} />
-        <Redirect to="/" />
-      </Switch>
-    );
-  }
 
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -101,22 +25,39 @@ function App(props) {
         setEmailVerified(true);
       } else {
         setEmailVerified(false);
+        return;
       }
       console.log("User has logged in");
       console.log(user);
       user
         .getIdTokenResult()
         .then((idTokenResult) => {
-          // Confirm the user is an Admin / Normal User / Super User.
-
+          // Confirm the user is an Admin / Normal User / Super User / Leasee / Occupant.
           if (idTokenResult.claims.admin) {
             console.log("claim present admin");
             setRole("admin");
+            setIsUserLoggedIn(true);
+            setEmailVerified(true);
           } else if (idTokenResult.claims.superUser) {
+            console.log("claim present super user");
             setRole("superUser");
+            setIsUserLoggedIn(true);
+            setEmailVerified(true);
+          } else if (idTokenResult.claims.leasee) {
+            console.log("claim present leasee");
+            setRole("leasee");
+            setIsUserLoggedIn(true);
+            setEmailVerified(true);
+          } else if (idTokenResult.claims.occupant) {
+            console.log("claim present occupant");
+            setRole("occupant");
+            setIsUserLoggedIn(true);
+            setEmailVerified(true);
           } else {
             console.log("No claims present, so normal user");
             setRole("user");
+            setIsUserLoggedIn(true);
+            setEmailVerified(true);
           }
         })
         .catch((error) => {
@@ -130,12 +71,89 @@ function App(props) {
     }
   });
 
-  return (
-    <BrowserRouter>
-      {/* gets the routes according to the role of admin / user / superuser */}
-      <Switch>{routes}</Switch>
-    </BrowserRouter>
-  );
+  if (isUserLoggedIn && isEmailVerified) {
+    switch (role) {
+      case "superUser":
+        routes = (
+          <Switch>
+            <Route path="/superuser" exact component={SuperUserDashboard} />
+            <Route
+              path="/test"
+              exact
+              render={() => <div>Test super page</div>}
+            />
+            <Redirect to="/superuser" />
+          </Switch>
+        );
+        return <BrowserRouter>{routes}</BrowserRouter>;
+      case "admin":
+        console.log("REACHED ADMIN SWITCH");
+        routes = (
+          <Switch>
+            <Route path="/admin" exact component={AdminDashboard} />
+            <Route path="/tests" exact component={AdminDashboard} />
+            <Route path="/testss" exact component={AdminDashboard} />
+            <Route path="/test" exact render={() => <div>Test page</div>} />
+            <Redirect to="/admin" />
+          </Switch>
+        );
+        return <BrowserRouter>{routes}</BrowserRouter>;
+
+      case "leasee":
+        console.log("THE LOGGER IS LEASEE");
+        routes = (
+          <Switch>
+            <Route path="/leasee" exact component={Dashboard} />
+            {/* <Route path="/leasee" exact render={() => <div>I am leasee</div>} /> */}
+            <Route path="/leastest" exact component={AdminDashboard} />
+            <Redirect to="/leasee" />
+          </Switch>
+        );
+        return <BrowserRouter>{routes}</BrowserRouter>;
+
+      case "occupant":
+        routes = (
+          <Switch>
+            <Route path="/occupant" exact component={Dashboard} />
+            <Route path="/login" exact component={Login} />
+          </Switch>
+        );
+        return <BrowserRouter>{routes}</BrowserRouter>;
+
+      // normal user
+      default:
+        routes = (
+          <Switch>
+            <Route path="/" exact component={Dashboard} />
+            <Route path="/login" exact component={Login} />
+            {/* <Redirect to="/" /> */}
+          </Switch>
+        );
+        return <BrowserRouter>{routes}</BrowserRouter>;
+    }
+  } else if (isUserLoggedIn && !isEmailVerified) {
+    // loggedin but not verified
+    routes = (
+      <Switch>
+        <Route path="/verify-email" exact component={EmailVerfiy} />
+        <Redirect to="/verify-email" />
+      </Switch>
+    );
+    return <BrowserRouter>{routes}</BrowserRouter>;
+  } else {
+    // not loggedin
+    routes = (
+      <Switch>
+        <Route path="/" exact component={Dashboard} />
+        <Route path="/login" exact component={Login} />
+        <Route path="/register" exact component={Register} />
+        <Route path="/no" exact render={() => <div>No one logged in</div>} />
+        <Route path="/tests" exact render={() => <div>Test page</div>} />
+        <Redirect to="/" />
+      </Switch>
+    );
+    return <BrowserRouter>{routes}</BrowserRouter>;
+  }
 }
 
 const mapStateToProps = (state) => {

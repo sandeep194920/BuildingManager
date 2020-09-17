@@ -6,7 +6,7 @@ const AdminAddUser = (props) => {
   const { onUserAddByAdmin } = props;
   const [email, setEmail] = useState(null);
   const [unitNo, setUnitNo] = useState(null);
-  const [selectedOption, setSelectedOption] = useState("occupant");
+  const [selectedOption, setSelectedOption] = useState("leasee");
 
   const userAdditionByAdminHandler = (e) => {
     e.preventDefault(); // prevents page refresh

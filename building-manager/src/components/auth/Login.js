@@ -12,7 +12,7 @@ const Login = (props) => {
 
   const loginHandler = (e) => {
     e.preventDefault(); // prevents page refresh
-    console.log("REached login handler");
+    console.log("Reached login handler");
     onLoginUser(email, pass);
   };
 
@@ -21,12 +21,13 @@ const Login = (props) => {
       // User is signed in.
       console.log("Header logged in if -> " + user.uid);
       user.getIdTokenResult().then((idTokenResult) => {
-        // console.log(idTokenResult.claims);
         if (idTokenResult.claims.admin) {
           history.push("/admin");
         } else if (idTokenResult.claims.superUser) {
           history.push("/superuser");
-        } else {
+        }
+        // for all other users -> normal user / leasee / occupant
+        else {
           history.push("/");
         }
       });
@@ -71,6 +72,10 @@ const Login = (props) => {
       <br></br>
       <br></br>
       <a href="/">Home</a>
+      <br></br>
+      <br></br>
+
+      <a href="/register">Register</a>
     </div>
   );
 };

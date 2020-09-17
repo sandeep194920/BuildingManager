@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { makeAdmin, makeSuperUser } from "../../store/actions/authActions";
+import {
+  makeAdmin,
+  makeSuperUser,
+  makeTenant,
+} from "../../store/actions/authActions";
 import { logout } from "../../store/actions/authActions";
 import { useHistory } from "react-router";
 
@@ -8,6 +12,8 @@ const SuperUserDashboard = (props) => {
   const {
     makeUserAsAdmin,
     makeUserAsSuperUser,
+    makeUserAsLeasee,
+    makeUserAsOccupant,
     onLogoutUser,
     firebaseProp,
   } = props;
@@ -22,6 +28,18 @@ const SuperUserDashboard = (props) => {
     e.preventDefault();
     console.log("The email is " + email);
     makeUserAsSuperUser(email);
+  };
+
+  const makeLeaseeHandler = (e) => {
+    e.preventDefault();
+    console.log("The email is " + email);
+    makeUserAsLeasee(email);
+  };
+
+  const makeOccupantHandler = (e) => {
+    e.preventDefault();
+    console.log("The email is " + email);
+    makeUserAsOccupant(email);
   };
 
   const logoutHandler = () => {
@@ -53,10 +71,25 @@ const SuperUserDashboard = (props) => {
           onClick={makeSuperUserHandler}
           value="Make Super User"
         />
+        <br></br>
+
+        <br></br>
+        <input type="submit" onClick={makeLeaseeHandler} value="Make Leasee" />
+        <br></br>
+        <br></br>
+
+        <input
+          type="submit"
+          onClick={makeOccupantHandler}
+          value="Make Occupant"
+        />
+        <br></br>
+        <br></br>
       </form>
       <br></br>
       <br></br>
       <br></br>
+      <a href="/test">Test</a>
 
       {firebaseProp.auth.uid ? (
         <button type="button" onClick={logoutHandler}>
@@ -83,6 +116,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     makeUserAsAdmin: (email) => dispatch(makeAdmin(email)),
     makeUserAsSuperUser: (email) => dispatch(makeSuperUser(email)),
+    makeUserAsLeasee: (email) => dispatch(makeTenant(email, "leasee")),
+    makeUserAsOccupant: (email) => dispatch(makeTenant(email, "occupant")),
     onLogoutUser: (history) => dispatch(logout(history)),
   };
 };

@@ -1,10 +1,11 @@
 // user registration -> Comes from Register.js
 export const register = (registrationParams) => {
+  console.log("Entering register() in authAction.js.....");
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firebase = getFirebase();
     const firestore = getFirestore();
 
-    console.log("The username " + registrationParams.email);
+    console.log("The user email is " + registrationParams.email);
     console.log("The pass is " + registrationParams.password);
 
     // before the user gets registered, we need to check if this user exists in unregistered users collection.
@@ -89,6 +90,24 @@ export const register = (registrationParams) => {
               lastName: registrationParams.lastName,
               type: tenantType,
             });
+            // after successfully registering the user, check if his tenantType is leasee/occupant. If so then assign him the role of leasee/occupant using cloud functions
+          })
+          .then(function () {
+            // if tenant type is either leasee or occupant
+            console.log(
+              `The email is ${email} and the tenantType is ${tenantType}`
+            );
+            // if tenant type is not -1 means that if the tenant is already present in unregisteredUsers collection and would be either leasee or occupant
+            if (tenantType !== -1) {
+              console.log(`Assigning ${tenantType} role to ${email}`);
+              // calling cloud function to assign tenant role
+              // makeTenant(email,tenantType);   ---> this simply doesn't work because we need to dispatch the async action and it can't be called like a normal function, hence we dispatch it like below
+              dispatch(makeTenant(email, tenantType));
+            } else {
+              console.log(
+                `No role is assigned to the ${registrationParams.email}`
+              );
+            }
           })
           .catch((err) => {
             dispatch({
@@ -124,6 +143,9 @@ export const register = (registrationParams) => {
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
+      })
+      .then(function () {
+        console.log("Exitting register() in authAction.js.....");
       });
   };
 };
@@ -213,5 +235,22 @@ export const makeSuperUser = (superUserEmail) => {
     addSuperUserRole({ email: superUserEmail }).then((result) =>
       console.log(result)
     );
+  };
+};
+
+// This addTenantRole() is used to make an email the leasee/occupant using cloud functions
+// called in register() in authActions.js (in the same file)
+export const makeTenant = (tenantEmail, tenantType) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    console.log("The email whome we make tenant is " + tenantEmail);
+    const firebase = getFirebase();
+
+    // calling cloud function here
+    const addTenantRole = firebase.functions().httpsCallable("addTenantRole");
+
+    addTenantRole({
+      email: tenantEmail,
+      tenantRole: tenantType,
+    }).then((result) => console.log(result));
   };
 };

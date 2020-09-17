@@ -38,6 +38,7 @@ const AdminDashboard = (props) => {
       </p>
       <br></br>
       <AdminAddUser />
+      <a href="/test">Test</a>
     </div>
   );
 };

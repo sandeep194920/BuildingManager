@@ -52,3 +52,44 @@ exports.addSuperUserRole = functions.https.onCall((data, context) => {
     })
     .catch((err) => console.log("There is an error here " + err));
 });
+
+//assigning leasee/occupant role when the user registers (when user's email already exists in unregisteredUsers collection)
+exports.addTenantRole = functions.https.onCall((data, context) => {
+  // data param include any data we send when we call from front-end
+  console.log("Entered addTenantRole cloud funtion");
+  // get the user and add tenant role (leasee or occupant) to the user
+  if (data.tenantRole === "leasee") {
+    return admin
+      .auth()
+      .getUserByEmail(data.email)
+      .then((user) => {
+        return admin.auth().setCustomUserClaims(user.uid, {
+          leasee: true,
+        });
+      })
+      .then(() => {
+        return {
+          message: `Success! ${data.email} has been made leasee`,
+        };
+      })
+      .catch((err) => console.log("There is an error here " + err));
+  } else if (data.tenantRole === "occupant") {
+    return admin
+      .auth()
+      .getUserByEmail(data.email)
+      .then((user) => {
+        return admin.auth().setCustomUserClaims(user.uid, {
+          occupant: true,
+        });
+      })
+      .then(() => {
+        return {
+          message: `Success! ${data.email} has been made occupant`,
+        };
+      })
+      .catch((err) => console.log("There is an error here " + err));
+  } else {
+    // This statement is mostly not reached as this condition doesn't occur
+    console.log(`No role assigned to ${email} since he is an external user`);
+  }
+});
