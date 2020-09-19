@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Dashboard from "./components/dashboard/Dashboard";
+import TenantDashboard from "./components/dashboard/TenantDashboard";
 import AdminDashboard from "./components/dashboard/AdminDashboard";
 import SuperUserDashboard from "./components/dashboard/SuperUserDashboard";
 import { connect } from "react-redux";
@@ -10,8 +11,7 @@ import EmailVerfiy from "./components/auth/EmailVerify";
 import Register from "./components/auth/Register";
 
 function App(props) {
-  const { firebaseProp } = props; // this is given by firebaseReducer coming from mapStateToProps. We might use this to check the uid or something related to the user. Alternatively, we could use firebase which we imported
-  console.log(firebaseProp);
+  // const { firebaseProp } = props; // this is given by firebaseReducer coming from mapStateToProps. We might use this to check the uid or something related to the user. Alternatively, we could use firebase which we imported
   const [role, setRole] = React.useState("user");
   const [isEmailVerified, setEmailVerified] = React.useState(true);
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(true);
@@ -103,9 +103,7 @@ function App(props) {
         console.log("THE LOGGER IS LEASEE");
         routes = (
           <Switch>
-            <Route path="/leasee" exact component={Dashboard} />
-            {/* <Route path="/leasee" exact render={() => <div>I am leasee</div>} /> */}
-            <Route path="/leastest" exact component={AdminDashboard} />
+            <Route path="/leasee" exact component={TenantDashboard} />
             <Redirect to="/leasee" />
           </Switch>
         );
@@ -126,6 +124,7 @@ function App(props) {
           <Switch>
             <Route path="/" exact component={Dashboard} />
             <Route path="/login" exact component={Login} />
+            <Route path="/test" exact render={() => <div>Test page</div>} />
             {/* <Redirect to="/" /> */}
           </Switch>
         );
