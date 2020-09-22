@@ -51,10 +51,12 @@ const AdminDashboard = (props) => {
         {authProp.authError !== null && authProp.authError}
       </p>
       <br></br>
+      <hr />
       <AdminAddUser />
       {/* send notification to a unit */}
       <br></br>
       <br></br>
+      <hr />
       <h2>Send notification to the tenants in the unit</h2>
       <form onSubmit={notifyUnitHandler}>
         <label>Unit number</label>
