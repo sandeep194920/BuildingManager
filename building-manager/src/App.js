@@ -125,6 +125,7 @@ function App(props) {
             <Route path="/" exact component={Dashboard} />
             <Route path="/login" exact component={Login} />
             <Route path="/test" exact render={() => <div>Test page</div>} />
+            {/* TODO : The redirect below should be uncommented but there are some problems that occur on doing so. Investigate this later and remove this comment once fixed */}
             {/* <Redirect to="/" /> */}
           </Switch>
         );

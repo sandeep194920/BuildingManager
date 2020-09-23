@@ -8,6 +8,8 @@ const functions = require("firebase-functions");
 //   response.send("Hello from Firebase!");
 // });
 
+// NOTE : The console logs you make here will not appear in the browser. It will appear in cloud function logs.
+
 const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 
@@ -92,4 +94,34 @@ exports.addTenantRole = functions.https.onCall((data, context) => {
     // This statement is mostly not reached as this condition doesn't occur
     console.log(`No role assigned to ${email} since he is an external user`);
   }
+});
+
+// Admin Notifications
+
+//  when a user has signed up, we create a notifcation for the admin to know.
+
+const createNotification = (notification) => {
+  return admin
+    .firestore()
+    .collection("adminNotifications")
+    .add(notification)
+    .then((doc) => console.log("Admin notification added " + doc));
+};
+
+// added to adminNotification when user signsup
+exports.userSignedUp = functions.auth.user().onCreate((user) => {
+  return admin
+    .firestore()
+    .collection("users")
+    .doc(user.uid)
+    .get()
+    .then(() => {
+      // create notification
+      const notifcation = {
+        type: "signedup",
+        user: user.email,
+        time: admin.firestore.FieldValue.serverTimestamp(),
+      };
+      return createNotification(notifcation);
+    });
 });

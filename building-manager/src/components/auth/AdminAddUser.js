@@ -16,6 +16,13 @@ const AdminAddUser = (props) => {
       unitNo,
       selectedOption,
     });
+    alert(
+      `You as an admin have successfully assigned the unit ${unitNo} to the user having email ${email}`
+    );
+    // set back all to defaults so that it clears out the fields in the UI
+    setEmail("");
+    setUnitNo("");
+    setSelectedOption("leasee");
   };
 
   return (
