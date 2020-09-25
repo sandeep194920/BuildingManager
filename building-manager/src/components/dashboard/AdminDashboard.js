@@ -20,10 +20,6 @@ const AdminDashboard = (props) => {
   const [message, setMessage] = useState("");
   const history = useHistory();
 
-  useEffect(() => {
-    console.log(firestoreAdminNotifications);
-  }, [firestoreAdminNotifications]);
-
   useFirestoreConnect([
     {
       collection: "adminNotifications",

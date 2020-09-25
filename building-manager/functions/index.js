@@ -11,7 +11,29 @@ const functions = require("firebase-functions");
 // NOTE : The console logs you make here will not appear in the browser. It will appear in cloud function logs.
 
 const admin = require("firebase-admin");
+
 admin.initializeApp(functions.config().firebase);
+
+// Currently, the below part of code is not used yet in our app. This part was added to filter the users based on their roles
+
+const auth = admin.auth();
+
+const getAllUsers = (req, res) => {
+  const maxResults = 1000; // optional arg.
+  auth
+    .listUsers(maxResults)
+    .then((userRecords) => {
+      userRecords.users.forEach((user) => console.log(user.toJSON()));
+      res.end("Retrieved all the users");
+    })
+    .catch((error) => console.log(error));
+};
+
+module.exports = {
+  allusers: functions.https.onRequest(getAllUsers),
+};
+
+// Currently, the above part of code is not used yet in our app
 
 //when we call addAdminRole from front-end, the call back function written inside this is going to fire
 exports.addAdminRole = functions.https.onCall((data, context) => {
