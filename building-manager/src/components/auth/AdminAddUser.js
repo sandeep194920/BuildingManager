@@ -30,7 +30,6 @@ const AdminAddUser = (props) => {
       <h3>Assign the unit number to the tenant</h3>
       <form onSubmit={userAdditionByAdminHandler}>
         <br></br>
-        <br></br>
         <label>Enter Email Id</label>
         <br></br>
 
@@ -87,7 +86,7 @@ const AdminAddUser = (props) => {
       </form>
       <br></br>
       <br></br>
-      <a href="/">Home</a>
+      {/* <a href="/">Home</a> */}
     </div>
   );
 };

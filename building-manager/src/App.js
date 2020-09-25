@@ -6,7 +6,7 @@ import TenantDashboard from "./components/dashboard/TenantDashboard";
 import AdminDashboard from "./components/dashboard/AdminDashboard";
 import SuperUserDashboard from "./components/dashboard/SuperUserDashboard";
 import { connect } from "react-redux";
-import firebase from "firebase/app";
+import firebase from "firebase/app"; // this is used because we need to retrieve the data of idTokens or user claims/roles which can't be obtained from firebaseProp
 import EmailVerfiy from "./components/auth/EmailVerify";
 import Register from "./components/auth/Register";
 

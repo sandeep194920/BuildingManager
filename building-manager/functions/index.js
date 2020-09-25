@@ -119,7 +119,7 @@ exports.userSignedUp = functions.auth.user().onCreate((user) => {
       // create notification
       const notifcation = {
         type: "signedup",
-        user: user.email,
+        content: `User signed up ${user.email}`,
         time: admin.firestore.FieldValue.serverTimestamp(),
       };
       return createNotification(notifcation);

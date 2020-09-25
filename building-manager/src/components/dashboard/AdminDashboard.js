@@ -1,16 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { logout } from "../../store/actions/authActions";
 import { notifyUnit } from "../../store/actions/adminFunctions";
 import AdminAddUser from "../auth/AdminAddUser";
 import { useHistory } from "react-router";
+import { useFirestoreConnect } from "react-redux-firebase"; // this is a hoc which needs to be used to get the firestore reducer data to say which collection's data we need to get from firestore
+import moment from "moment";
 
 const AdminDashboard = (props) => {
-  const { onLogoutUser, firebaseProp, authProp, onNotifyUnit } = props;
+  const {
+    onLogoutUser,
+    firebaseProp,
+    authProp,
+    onNotifyUnit,
+    firestoreAdminNotifications,
+  } = props;
   const [unitNo, setUnitNo] = useState("");
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const history = useHistory();
+
+  useEffect(() => {
+    console.log(firestoreAdminNotifications);
+  }, [firestoreAdminNotifications]);
+
+  useFirestoreConnect([
+    {
+      collection: "adminNotifications",
+    },
+  ]);
 
   // logout handler
   const logoutHandler = () => {
@@ -29,7 +47,6 @@ const AdminDashboard = (props) => {
   return (
     <div>
       <h1> This is admin Admin Dashboard</h1>
-      <p>Let's add admin stuff here</p>
       <br></br>
       {firebaseProp.auth.uid ? (
         <button type="button" onClick={logoutHandler}>
@@ -54,8 +71,6 @@ const AdminDashboard = (props) => {
       <hr />
       <AdminAddUser />
       {/* send notification to a unit */}
-      <br></br>
-      <br></br>
       <hr />
       <h2>Send notification to the tenants in the unit</h2>
       <form onSubmit={notifyUnitHandler}>
@@ -90,16 +105,35 @@ const AdminDashboard = (props) => {
         <br />
         <input type="submit" value="Notify tenants" />
       </form>
+      <hr />
+      <h2>Notifications</h2>
+      <div>
+        {firestoreAdminNotifications &&
+          firestoreAdminNotifications.map((notification) => {
+            return (
+              <React.Fragment key={notification.id}>
+                <br />
+                {`${notification.type} - ${notification.content}  -  ${moment(
+                  notification.time.toDate()
+                ).fromNow()}`}
+                <br />
+              </React.Fragment>
+            );
+          })}
+      </div>
+
       <br />
-      <a href="/test">Test</a>
+      <br />
     </div>
   );
 };
 
 const mapStateToProps = (state) => {
+  console.log(state.firestore);
   return {
     firebaseProp: state.firebase,
     authProp: state.auth,
+    firestoreAdminNotifications: state.firestore.ordered.adminNotifications,
   };
 };
 
