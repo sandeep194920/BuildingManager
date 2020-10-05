@@ -112,8 +112,9 @@ function App(props) {
       case "occupant":
         routes = (
           <Switch>
-            <Route path="/occupant" exact component={Dashboard} />
-            <Route path="/login" exact component={Login} />
+            <Route path="/occupant" exact component={TenantDashboard} />
+            {/* <Route path="/login" exact component={Login} /> */}
+            <Redirect to="/occupant" />
           </Switch>
         );
         return <BrowserRouter>{routes}</BrowserRouter>;
@@ -123,8 +124,8 @@ function App(props) {
         routes = (
           <Switch>
             <Route path="/" exact component={Dashboard} />
-            <Route path="/login" exact component={Login} />
             <Route path="/test" exact render={() => <div>Test page</div>} />
+            <Route path="/noo" exact render={() => <div>Test noo</div>} />
             {/* TODO : The redirect below should be uncommented but there are some problems that occur on doing so. Investigate this later and remove this comment once fixed */}
             {/* <Redirect to="/" /> */}
           </Switch>

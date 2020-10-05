@@ -4,25 +4,21 @@ import { addUserByAdmin } from "../../store/actions/authActions";
 
 const AdminAddUser = (props) => {
   const { onUserAddByAdmin } = props;
-  const [email, setEmail] = useState(null);
-  const [unitNo, setUnitNo] = useState(null);
+  const [email, setEmail] = useState("");
+  const [unitNo, setUnitNo] = useState("");
   const [selectedOption, setSelectedOption] = useState("leasee");
 
   const userAdditionByAdminHandler = (e) => {
     e.preventDefault(); // prevents page refresh
     console.log("Reached admin register handler");
-    onUserAddByAdmin({
-      email,
-      unitNo,
-      selectedOption,
-    });
-    alert(
-      `You as an admin have successfully assigned the unit ${unitNo} to the user having email ${email}`
-    );
+    onUserAddByAdmin(email, unitNo, selectedOption);
     // set back all to defaults so that it clears out the fields in the UI
     setEmail("");
     setUnitNo("");
     setSelectedOption("leasee");
+    alert(
+      `You as an admin have successfully assigned the unit ${unitNo} to the user ${email}`
+    );
   };
 
   return (
@@ -93,7 +89,7 @@ const AdminAddUser = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onUserAddByAdmin: ({ email, unitNo, selectedOption }) =>
+    onUserAddByAdmin: (email, unitNo, selectedOption) =>
       dispatch(
         addUserByAdmin({
           email,

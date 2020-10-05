@@ -12,7 +12,7 @@ const TenantDashboard = (props) => {
   const {
     onLogoutUser,
     firebaseProp,
-    firestoreUsers,
+    firestoreUser,
     firestoreNotifications,
   } = props;
   const [loggedInUser, setLoggedInUser] = useState(null); //this will be updated in the useEffect below
@@ -25,10 +25,10 @@ const TenantDashboard = (props) => {
       console.log("The user logged in is " + firebaseProp.auth.uid);
       setLoggedInUser(firebaseProp.auth.uid);
       // get the unit number of the user who has currently logged in and pass it to the doc inside useFirestoreConnect
-      // 'if' loop is used because otherwise we get null error before the firestoreUsers loads, so we first check if it exists. It takes time to load and then displays it
-      if (firestoreUsers && loggedInUser) {
-        setUnitNoOfUser(firestoreUsers[loggedInUser]["unitNo"]);
-        console.log(firestoreUsers[loggedInUser]["unitNo"]);
+      // 'if' loop is used because otherwise we get null error before the firestoreUser loads, so we first check if it exists. It takes time to load and then displays it
+      if (firestoreUser && loggedInUser) {
+        setUnitNoOfUser(firestoreUser[loggedInUser]["unitNo"]);
+        console.log(firestoreUser[loggedInUser]["unitNo"]);
       }
       if (firestoreNotifications) {
         setNotifications(firestoreNotifications);
@@ -37,7 +37,7 @@ const TenantDashboard = (props) => {
     }
   }, [
     firebaseProp.auth.uid,
-    firestoreUsers,
+    firestoreUser,
     firestoreNotifications,
     loggedInUser,
   ]);
@@ -63,6 +63,15 @@ const TenantDashboard = (props) => {
   const logoutHandler = () => {
     onLogoutUser(history);
   };
+  useEffect(() => {
+    if (firestoreUser && loggedInUser) {
+      console.log(firestoreUser[loggedInUser].type);
+      // if ((firestoreUser[loggedInUser].type = "leasee")) {
+      //   // todo
+
+      // }
+    }
+  });
 
   return (
     <React.Fragment>
@@ -80,25 +89,37 @@ const TenantDashboard = (props) => {
       {notifications && (
         <div>
           {notifications.map((notification) => {
-            return (
-              <React.Fragment key={notification.id}>
-                <h3 style={{ color: "blue" }}>{notification.title}</h3>
-                <h4>{notification.message}</h4>
-                <br />
-              </React.Fragment>
-            );
+            if (firestoreUser && loggedInUser) {
+              console.log(notification.viewable);
+              if (
+                notification.viewable === "both" ||
+                notification.viewable === firestoreUser[loggedInUser].type
+              ) {
+                return (
+                  <React.Fragment key={notification.id}>
+                    <h3 style={{ color: "blue" }}>{notification.title}</h3>
+                    <h4>{notification.message}</h4>
+                    <br />
+                  </React.Fragment>
+                );
+              }
+            } else {
+              return null;
+            }
+            return null;
           })}
         </div>
       )}
     </React.Fragment>
   );
 };
+
 const mapStateToProps = (state) => {
-  console.log(state.firestore);
+  console.log(state.firestore.data.users);
   return {
     firebaseProp: state.firebase,
     firestoreNotifications: state.firestore.ordered.notifications,
-    firestoreUsers: state.firestore.data.users,
+    firestoreUser: state.firestore.data.users, // this gives the logged in user document
   };
 };
 
